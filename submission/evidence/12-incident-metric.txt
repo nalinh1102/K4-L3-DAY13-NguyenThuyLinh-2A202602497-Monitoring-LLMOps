@@ -1,0 +1,35 @@
+CP3 INCIDENT METRIC EVIDENCE
+Generated: 2026-09-30 (UTC+7)
+
+Challenge ID: day13-k4-l3b-monitoring-llmops-v1
+Cohort: K4
+Affected feature: monitoring
+Investigation window: 2026-09-30 11:57:21 to 11:59:46 UTC+7
+
+Source: GET /dashboard/data, rolling window 60 minutes
+
+Before incident:
+- latency P95: 1535ms
+- latency P99: 1997ms
+- TTFT P95: 50ms
+- error rate: 0.0%
+- retrieval success: 100.0%
+
+After 5 official challenge requests:
+- latency P95: 2652ms
+- latency P99: 4485ms
+- TTFT P95: 50ms
+- error rate: 0.0%
+- retrieval success: 100.0%
+
+Challenge latency threshold: 2000ms
+Result: P95 breached the challenge threshold by 652ms. P99 increased by 2488ms.
+Interpretation: tail latency degraded while TTFT, error rate, and retrieval success stayed normal.
+
+Recovery verification after disabling the incident:
+- 5/5 official challenge requests returned HTTP 200.
+- Server-side response latency: 152ms, 151ms, 151ms, 151ms, 151ms.
+- TTFT: 50ms for all five requests.
+- GET /health: rag_slow=false, tool_fail=false, cost_spike=false.
+
+No challenge seed, raw query, PII, or secret is included in this evidence.

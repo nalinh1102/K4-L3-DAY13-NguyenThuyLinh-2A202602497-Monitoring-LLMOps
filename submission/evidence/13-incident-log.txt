@@ -1,0 +1,26 @@
+CP3 INCIDENT LOG EVIDENCE
+Generated: 2026-09-30 (UTC+7)
+
+Challenge ID: day13-k4-l3b-monitoring-llmops-v1
+Selected abnormal request: req-5b55ac49
+
+Sanitized structured-log fields from data/logs.jsonl:
+ts=2026-09-30T04:57:26.967961Z
+event=response_sent
+correlation_id=req-5b55ac49
+feature=monitoring
+latency_ms=4485
+ttft_ms=50
+cost_usd=0.00135
+tool_success=true
+
+Why this request was selected:
+- It is inside the metric anomaly window.
+- It has the highest server-side latency among the five incident requests.
+- The same correlation_id is present in Langfuse trace metadata.
+
+Recovery comparison from the same official workload after mitigation:
+- Five response_sent records have latency_ms between 151 and 152.
+- All five have ttft_ms=50 and tool_success=true.
+
+No raw user message, user ID, session ID, challenge query, PII, or secret is included.

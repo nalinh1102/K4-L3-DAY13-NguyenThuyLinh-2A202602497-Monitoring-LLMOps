@@ -1,0 +1,20 @@
+Langfuse trace verification — 2026-09-30
+
+Source: Langfuse Observations API v2
+Environment: dev
+Valid trace trees: 20
+Required observations per trace: lab-agent-run, retrieval, generation
+
+10 latest valid trace IDs:
+3711ed50f9f8efffa5d22f57cda562c9
+3b84c41e49bf9be82339f5838bb58dc9
+3dc7d95ca092dd63215ed798f78aed12
+a14fe5f70be6f1e5248a73c289ba1c02
+4c62a32b07a1ac0c24f5599923eb3620
+bef90dbaadefc11c0725fb12e1e52d53
+4410cfa565567ff87fd78f74134e725b
+912bd00399da01b1e42afe3c8bbd57e1
+6d6810fb56e2c3ae76b97f3219f44dc9
+b22b3b0fd25c13b311e8e5047e1aff63
+
+No API key, secret or raw PII is included.

@@ -1,0 +1,11 @@
+Langfuse waterfall verification — baseline prompt v1
+
+Trace ID: 85c9a5fd24d8741d1e6cc2f1b652970f
+Correlation ID: req-20fd8725
+
+lab-agent-run (AGENT, version 1)
+├── retrieval (RETRIEVER)
+└── generation (GENERATION, version 1, prompt day13-chat@1)
+
+All observations share the same trace ID. Retrieval and generation have the
+root observation as their physical parent.

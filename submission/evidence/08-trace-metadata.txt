@@ -1,0 +1,21 @@
+Langfuse generation metadata verification
+
+Baseline
+- trace_id: 85c9a5fd24d8741d1e6cc2f1b652970f
+- correlation_id: req-20fd8725
+- prompt: day13-chat@1
+- prompt_label: baseline
+- model: claude-sonnet-4-5
+- usage: input=32, output=83, total=115
+- cost: input=0.000096, output=0.001245, total=0.001341 USD
+
+Candidate
+- trace_id: 6e3088356ed72cb03e97fc243f0c3f04
+- correlation_id: req-d719caf9
+- prompt: day13-chat@2
+- prompt_label: candidate
+- model: claude-sonnet-4-5
+- usage: input=47, output=151, total=198
+- cost: input=0.000141, output=0.002265, total=0.002406 USD
+
+Only scrubbed previews and safe metadata were captured; no raw PII is included.

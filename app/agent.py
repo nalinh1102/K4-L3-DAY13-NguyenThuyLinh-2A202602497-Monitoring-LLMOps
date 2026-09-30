@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import time
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 
 from . import metrics
 from .mock_llm import FakeLLM
@@ -51,7 +52,21 @@ class LabAgent:
             },
         ):
             started = time.perf_counter()
-            docs = retrieve(message)
+            with langfuse_client.start_as_current_observation(
+                name="retrieval",
+                as_type="retriever",
+                input={"query_preview": summarize_text(message)},
+                metadata={"correlation_id": correlation_id},
+            ) as retrieval_observation:
+                docs = retrieve(message)
+                retrieval_observation.update(
+                    output={"doc_count": len(docs)},
+                    metadata={
+                        "correlation_id": correlation_id,
+                        "doc_count": len(docs),
+                    },
+                )
+
             prompt = resolve_prompt(
                 langfuse_client,
                 feature=feature,
@@ -71,13 +86,62 @@ class LabAgent:
                 },
                 version=prompt.version,
             )
-            # TODO (CP2): instrument retrieve() and FakeLLM.generate() as child
-            # observations. The nested generation must receive prompt, usage and cost.
+
+            generation_started_at = datetime.now(timezone.utc)
             with propagate_attributes(prompt=prompt.managed_prompt):
-                response = self.llm.generate(prompt.text)
+                with langfuse_client.start_as_current_observation(
+                    name="generation",
+                    as_type="generation",
+                    input={"prompt_preview": summarize_text(prompt.text)},
+                    metadata={
+                        "correlation_id": correlation_id,
+                        "prompt_name": prompt.name,
+                        "prompt_label": prompt.label,
+                        "prompt_version": prompt.version,
+                        "prompt_source": prompt.source,
+                    },
+                    version=prompt.version,
+                    model=self.model,
+                    prompt=prompt.managed_prompt,
+                ) as generation_observation:
+                    response = self.llm.generate(prompt.text)
+                    cost_usd = self._estimate_cost(
+                        response.usage.input_tokens,
+                        response.usage.output_tokens,
+                    )
+                    input_cost_usd = round((response.usage.input_tokens / 1_000_000) * 3, 6)
+                    output_cost_usd = round((response.usage.output_tokens / 1_000_000) * 15, 6)
+                    generation_observation.update(
+                        output={"answer_preview": summarize_text(response.text)},
+                        metadata={
+                            "correlation_id": correlation_id,
+                            "prompt_name": prompt.name,
+                            "prompt_label": prompt.label,
+                            "prompt_version": prompt.version,
+                            "prompt_source": prompt.source,
+                            "input_tokens": response.usage.input_tokens,
+                            "output_tokens": response.usage.output_tokens,
+                            "cost_usd": cost_usd,
+                            "ttft_ms": response.ttft_ms,
+                        },
+                        completion_start_time=generation_started_at
+                        + timedelta(milliseconds=response.ttft_ms),
+                        model=response.model,
+                        usage_details={
+                            "input": response.usage.input_tokens,
+                            "output": response.usage.output_tokens,
+                            "total": response.usage.input_tokens
+                            + response.usage.output_tokens,
+                        },
+                        cost_details={
+                            "input": input_cost_usd,
+                            "output": output_cost_usd,
+                            "total": cost_usd,
+                        },
+                        prompt=prompt.managed_prompt,
+                    )
             quality_score = self._heuristic_quality(message, response.text, docs)
             latency_ms = int((time.perf_counter() - started) * 1000)
-            cost_usd = self._estimate_cost(response.usage.input_tokens, response.usage.output_tokens)
 
         metrics.record_request(
             latency_ms=latency_ms,

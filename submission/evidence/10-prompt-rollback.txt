@@ -1,0 +1,18 @@
+Langfuse production-label promote and rollback — 2026-09-30
+
+1. Initial state
+   production -> day13-chat v1
+
+2. Promote
+   production -> day13-chat v2
+   correlation_id: req-cb1ac2ce
+   trace_id: f975eedec46442a8294ea41b20f87431
+   root/generation version: 2
+
+3. Rollback
+   production -> day13-chat v1
+   correlation_id: req-8f37320f
+   trace_id: 39683b7b20b9541559c20acac0309722
+   root/generation version: 1
+
+Final state: production -> day13-chat v1

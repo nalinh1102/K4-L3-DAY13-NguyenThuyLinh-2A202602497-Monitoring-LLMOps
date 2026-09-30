@@ -1,0 +1,9 @@
+Runtime structured-log excerpt from data/logs.jsonl after CP1:
+
+{"service":"api","latency_ms":1535,"ttft_ms":50,"tokens_in":36,"tokens_out":161,"cost_usd":0.002523,"quality_score":0.9,"tool_name":"retrieval","tool_success":true,"payload":{"answer_preview":"Starter answer. You should improve this output logic and add better quality chec..."},"event":"response_sent","model":"claude-sonnet-4-5","correlation_id":"req-19c60998","user_id_hash":"2055254ee30a","session_id":"s01","feature":"qa","env":"dev","level":"info","ts":"2026-09-30T04:13:34.132530Z"}
+
+Response-header propagation check:
+STATUS=200
+X_REQUEST_ID=req-c0ffee12
+X_RESPONSE_TIME_MS=1168.79
+BODY_CORRELATION_ID=req-c0ffee12

@@ -1,0 +1,14 @@
+Langfuse prompt versions — day13-chat
+
+Version 1
+- template: Feature/Docs/Question
+- labels after rollback: baseline, production
+- trace: 85c9a5fd24d8741d1e6cc2f1b652970f
+
+Version 2
+- change: requests a clear, concise answer using retrieved context
+- labels after rollback: candidate, latest
+- trace: 6e3088356ed72cb03e97fc243f0c3f04
+
+Both prompts retain the required variables:
+{{feature}}, {{docs}}, {{message}}

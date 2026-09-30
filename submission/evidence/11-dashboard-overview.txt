@@ -1,0 +1,39 @@
+Dashboard runtime verification — http://127.0.0.1:8000/dashboard
+
+HTTP status: 200
+Source: data/logs.jsonl
+Time range: 60 minutes
+Auto-refresh: 30 seconds
+Runtime records: 79
+Panels found: 6/6
+
+Latency
+- P50: 387ms
+- P95: 1535ms
+- P99: 1997ms
+- TTFT P95: 50ms
+- threshold: P95 <= 3000ms
+
+Traffic
+- requests: 31
+- average: 0.52 requests/minute
+- peak: 11 requests/minute
+
+Errors & Retrieval
+- error rate: 0%
+- retrieval success: 100%
+- thresholds: error <= 2%, retrieval >= 90%
+
+Cost
+- total: 0.064521 USD
+- threshold: <= 2.5 USD
+
+Tokens
+- input: 1057
+- output: 4090
+- total: 5147
+- threshold: <= 50000 tokens
+
+Quality
+- mean: 0.855
+- threshold: >= 0.75

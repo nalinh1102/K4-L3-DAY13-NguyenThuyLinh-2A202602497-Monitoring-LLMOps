@@ -1,0 +1,34 @@
+CP3 INCIDENT TRACE EVIDENCE
+Generated: 2026-09-30 (UTC+7)
+
+Challenge ID: day13-k4-l3b-monitoring-llmops-v1
+Correlation ID: req-5b55ac49
+Trace ID: 207b0a9724355ee340cf8603e63147a2
+
+Observation tree (Langfuse Observations API):
+- lab-agent-run (AGENT)
+  observation_id=547f24584c7b7a6e
+  latency=4.486s
+  - retrieval (RETRIEVER)
+    observation_id=91ff00d96f1e763b
+    latency=2.501s
+    doc_count=1
+  - generation (GENERATION)
+    observation_id=88eb98919fafd916
+    latency=0.151s
+    time_to_first_token=0.049s
+    prompt_name=day13-chat
+    prompt_version=1
+    prompt_label=production
+
+Conclusion:
+The retrieval child span is the affected operation: 2.501s versus 0.151s for generation.
+Together with the metric anomaly and the 4485ms response_sent log, this localizes the
+primary controlled delay to RAG retrieval while generation remains healthy.
+
+Mitigation verification:
+- rag_slow was disabled.
+- The same five-request workload then produced 151-152ms server-side latency.
+- GET /health confirmed all incidents were false.
+
+No prompt text, model output, challenge query, PII, or secret is included.
